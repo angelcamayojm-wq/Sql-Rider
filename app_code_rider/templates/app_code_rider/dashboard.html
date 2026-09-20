@@ -1,0 +1,252 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeRider - Fleet Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'app_code_rider/css/estilos.css' %}">
+</head>
+<body>
+
+    <header>
+        <div class="logo-box">
+            <div class="logo-avatar">🚀</div>
+            <h1>CODE RIDER <span style="font-size:0.8rem; color:#f472b6;">v2.0</span></h1>
+        </div>
+        <div class="dev-badge">
+            ⚡ Dev: Angel Esteban Rivera Camayo
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- METRICAS CON EMOJIS VIVAS -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-emoji">🏢</div>
+                <div class="metric-info">
+                    <h3>{{ total_empresas }}</h3>
+                    <p>EMPRESAS REGISTRADAS</p>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-emoji">👨‍✈️</div>
+                <div class="metric-info">
+                    <h3>{{ total_conductores }}</h3>
+                    <p>CONDUCTORES (1-N)</p>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-emoji">🪪</div>
+                <div class="metric-info">
+                    <h3>{{ total_licencias }}</h3>
+                    <p>LICENCIAS (1-1)</p>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-emoji">🗺️</div>
+                <div class="metric-info">
+                    <h3>{{ total_rutas }}</h3>
+                    <p>RUTAS ACTIVAS (N-M)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PESTAÑAS -->
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('tab-empresas', this)">🏢 1. Empresas</button>
+            <button class="tab-btn" onclick="switchTab('tab-conductores', this)">👨‍✈️ 2. Conductores (1-N)</button>
+            <button class="tab-btn" onclick="switchTab('tab-licencias', this)">🪪 3. Licencias (1-1)</button>
+            <button class="tab-btn" onclick="switchTab('tab-rutas', this)">🗺️ 4. Rutas (N-M)</button>
+        </div>
+
+        <!-- TAB 1: EMPRESAS -->
+        <div id="tab-empresas" class="tab-content active">
+            <div class="form-card">
+                <div class="card-title">✨ Registrar Nueva Empresa</div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="tipo_form" value="empresa">
+                    <div class="form-group">
+                        <label>🏢 Nombre de la Empresa</label>
+                        <input type="text" name="nombre" placeholder="Ej: TransCauca S.A." required>
+                    </div>
+                    <div class="form-group">
+                        <label>📄 NIT / Identificación Fiscal</label>
+                        <input type="text" name="nit" placeholder="Ej: 900123456-1" required>
+                    </div>
+                    <button type="submit" class="btn-submit">🚀 GUARDAR EMPRESA</button>
+                </form>
+            </div>
+            <div class="list-card">
+                <div class="card-title">📋 Empresas Registradas</div>
+                {% for e in empresas %}
+                <div class="data-item">
+                    <div>
+                        <div class="data-title">🏢 {{ e.nombre }}</div>
+                        <div class="data-sub">NIT: {{ e.nit }}</div>
+                    </div>
+                    <span class="badge-status">ID #{{ e.id }}</span>
+                </div>
+                {% empty %}
+                <p style="color:#9ca3af; text-align:center; margin-top:20px;">📭 No hay empresas registradas aún.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- TAB 2: CONDUCTORES -->
+        <div id="tab-conductores" class="tab-content">
+            <div class="form-card">
+                <div class="card-title">✨ Registrar Conductor</div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="tipo_form" value="conductor">
+                    <div class="form-group">
+                        <label>👤 Nombre Completo</label>
+                        <input type="text" name="nombre" placeholder="Ej: Carlos Mendoza" required>
+                    </div>
+                    <div class="form-group">
+                        <label>🆔 Documento de Cédula</label>
+                        <input type="text" name="documento" placeholder="Ej: 1061820391" required>
+                    </div>
+                    <div class="form-group">
+                        <label>🏢 Empresa Asignada (Relación 1 a N)</label>
+                        <select name="empresa" required>
+                            {% for e in empresas %}
+                            <option value="{{ e.id }}">{{ e.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-submit">🚀 GUARDAR CONDUCTOR</button>
+                </form>
+            </div>
+            <div class="list-card">
+                <div class="card-title">👥 Conductores en Sistema</div>
+                {% for c in conductores %}
+                <div class="data-item">
+                    <div>
+                        <div class="data-title">👨‍✈️ {{ c.nombre }}</div>
+                        <div class="data-sub">Cédula: {{ c.documento }} | Empresa: <strong style="color:#c4b5fd;">{{ c.empresa.nombre }}</strong></div>
+                    </div>
+                    <span class="badge-status">Activo</span>
+                </div>
+                {% empty %}
+                <p style="color:#9ca3af; text-align:center; margin-top:20px;">📭 No hay conductores registrados.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- TAB 3: LICENCIAS -->
+        <div id="tab-licencias" class="tab-content">
+            <div class="form-card">
+                <div class="card-title">✨ Vincular Licencia (1 a 1)</div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="tipo_form" value="licencia">
+                    <div class="form-group">
+                        <label>🔢 Número de Licencia</label>
+                        <input type="text" name="numero" placeholder="Ej: LIC-883921" required>
+                    </div>
+                    <div class="form-group">
+                        <label>🏷️ Categoría</label>
+                        <input type="text" name="categoria" placeholder="Ej: C1 / C2" required>
+                    </div>
+                    <div class="form-group">
+                        <label>👤 Conductor Titular (Relación 1 a 1)</label>
+                        <select name="conductor" required>
+                            {% for c in conductores %}
+                            <option value="{{ c.id }}">{{ c.nombre }} (CC: {{ c.documento }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-submit">🚀 VINCULAR LICENCIA</button>
+                </form>
+            </div>
+            <div class="list-card">
+                <div class="card-title">📜 Licencias Expedidas</div>
+                {% for l in licencias %}
+                <div class="data-item">
+                    <div>
+                        <div class="data-title">🪪 Nº {{ l.numero }} (Cat: {{ l.categoria }})</div>
+                        <div class="data-sub">Titular: <strong style="color:#f472b6;">{{ l.conductor.nombre }}</strong></div>
+                    </div>
+                    <span class="badge-status">Oficial</span>
+                </div>
+                {% empty %}
+                <p style="color:#9ca3af; text-align:center; margin-top:20px;">📭 Sin licencias registradas.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- TAB 4: RUTAS -->
+        <div id="tab-rutas" class="tab-content">
+            <div class="form-card">
+                <div class="card-title">✨ Crear Ruta (Muchos a Muchos)</div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="tipo_form" value="ruta">
+                    <div class="form-group">
+                        <label>🛣️ Nombre de la Ruta</label>
+                        <input type="text" name="nombre" placeholder="Ej: Popayán - Silvia Express" required>
+                    </div>
+                    <div class="form-group">
+                        <label>📍 Origen</label>
+                        <input type="text" name="origen" placeholder="Ej: Popayán" required>
+                    </div>
+                    <div class="form-group">
+                        <label>🏁 Destino</label>
+                        <input type="text" name="destino" placeholder="Ej: Silvia" required>
+                    </div>
+                    <div class="form-group">
+                        <label>👥 Conductores Asignados</label>
+                        <select name="conductores" multiple style="height: 100px;">
+                            {% for c in conductores %}
+                            <option value="{{ c.id }}">{{ c.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-submit">🚀 CREAR RUTA</button>
+                </form>
+            </div>
+            <div class="list-card">
+                <div class="card-title">📍 Cobertura de Rutas</div>
+                {% for r in rutas %}
+                <div class="data-item" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                    <div style="display: flex; justify-content: space-between; width: 100%;">
+                        <div class="data-title">🗺️ {{ r.nombre }}</div>
+                        <span class="badge-status">{{ r.origen }} ➔ {{ r.destino }}</span>
+                    </div>
+                    <div class="data-sub">
+                        Conductores: 
+                        {% for cond in r.conductores.all %}
+                            <span style="color:#c4b5fd; background:rgba(124,58,237,0.25); border: 1px solid rgba(167,139,250,0.4); padding:3px 10px; border-radius:10px; margin-right: 4px;">{{ cond.nombre }}</span>
+                        {% empty %}
+                            <span style="color:#9ca3af;">Ninguno</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% empty %}
+                <p style="color:#9ca3af; text-align:center; margin-top:20px;">📭 Sin rutas creadas.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        CodeRider Fleet System &copy; 2026 | Desarrollado por <strong>Angel Esteban Rivera Camayo</strong>
+    </footer>
+
+    <script>
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>
