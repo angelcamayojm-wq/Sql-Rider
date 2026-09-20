@@ -65,34 +65,32 @@
   <table>
     <tr>
       <td align="center" width="120">
-        <img src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/python.png" width="48" height="48" alt="Python" /><br>
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="48" height="48" alt="Python" /><br>
         <b>Python 3.11+</b>
       </td>
       <td align="center" width="120">
-        <img src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/django.png" width="48" height="48" alt="Django" /><br>
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" width="48" height="48" alt="Django" /><br>
         <b>Django 6.1</b>
       </td>
       <td align="center" width="120">
-        <img src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/html5.png" width="48" height="48" alt="HTML5" /><br>
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width="48" height="48" alt="HTML5" /><br>
         <b>HTML5</b>
       </td>
       <td align="center" width="120">
-        <img src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/css3.png" width="48" height="48" alt="CSS3" /><br>
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" width="48" height="48" alt="CSS3" /><br>
         <b>CSS3 Neón</b>
       </td>
       <td align="center" width="120">
-        <img src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/git.png" width="48" height="48" alt="Git" /><br>
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" width="48" height="48" alt="Git" /><br>
         <b>Git</b>
       </td>
       <td align="center" width="120">
-        <img src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/render.png" width="48" height="48" alt="Render" /><br>
+        <img src="https://img.shields.io/badge/Render-000000?style=for-the-badge&logo=render&logoColor=00f0ff" width="80" alt="Render" /><br>
         <b>Render Cloud</b>
       </td>
     </tr>
   </table>
 </div>
-
----
 
 ## 📊 Modelo de Base de Datos y Relaciones SQL
 
