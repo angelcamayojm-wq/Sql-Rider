@@ -1,0 +1,1 @@
+web: gunicorn pr_code_rider.wsgi:application
