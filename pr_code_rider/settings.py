@@ -1,5 +1,6 @@
 import dj_database_url
 import os
+from django.core.exceptions import ImproperlyConfigured
 """
 Django settings for pr_code_rider project.
 
@@ -13,10 +14,11 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get(
-    'SECRET_KEY',
-    '[ROTATED]',
-)
+SECRET_KEY = os.environ.get('SECRET_KEY')
+if not SECRET_KEY:
+    raise ImproperlyConfigured(
+        "SECRET_KEY must be set in the environment."
+    )
 DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
 ALLOWED_HOSTS = ['*']
 
